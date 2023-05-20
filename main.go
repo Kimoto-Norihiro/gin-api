@@ -38,7 +38,7 @@ func main() {
   // user := User{Name: "Genie"}
   // db.Create(&user)
 
-  router.GET("/bot", func(c *gin.Context) {
+  router.POST("/bot", func(c *gin.Context) {
     events, err := bot.ParseRequest(c.Request)
     if err != nil {
       if err == linebot.ErrInvalidSignature {
