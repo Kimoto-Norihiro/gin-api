@@ -51,10 +51,17 @@ func main() {
 
     for _, event := range events {
       log.Println(event)
+      log.Println(event.Type)
+      log.Println(event.Message)
+      log.Println(event.ReplyToken)
+      log.Println(event.Source.UserID)
       if event.Type == linebot.EventTypeMessage {
         switch message := event.Message.(type) {
         case *linebot.TextMessage:
           log.Println(message.Text)
+          if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+            log.Print(err)
+          }
         }
       }
     }
