@@ -2,44 +2,19 @@ package main
 
 import (
 	"fmt"
-	"log"
-	// "net/http"
 	"os"
 
-	"github.com/gin-gonic/gin"
+  "github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	// "gorm.io/driver/mysql"
-	// "gorm.io/gorm"
-)
 
-type User struct {
-  ID        uint   `json:"id"`
-  Name      string `json:"name"`
-}
+  "github.com/Kimoto-Norihiro/gin-api/utils/bot"
+)
 
 func main() {
   router := gin.Default()
 
-  // line-bot
-  bot, _ := linebot.New(
-    os.Getenv("CHANNEL_SECRET"),
-    os.Getenv("CHANNEL_ACCESS_TOKEN"),
-  )
-
-  // db
-  // dsn := "root:password@tcp(localhost:3306)/gin_api?charset=utf8mb4&parseTime=True&loc=Local"
-  // db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-  // if err != nil {
-  //   panic(err)
-  // }
-
-  // db.AutoMigrate(&User{})
-
-  // user := User{Name: "Genie"}
-  // db.Create(&user)
-
   router.POST("/bot", func(c *gin.Context) {
-    events, err := bot.ParseRequest(c.Request)
+    events, err := Bot.ParseRequest(c.Request)
     if err != nil {
       if err == linebot.ErrInvalidSignature {
         c.Writer.WriteHeader(400)
@@ -50,38 +25,42 @@ func main() {
     }
 
     for _, event := range events {
-      log.Println(event)
-      log.Println(event.Type)
-      log.Println(event.Message)
-      log.Println(event.ReplyToken)
-      log.Println(event.Source.UserID)
       if event.Type == linebot.EventTypeMessage {
         switch message := event.Message.(type) {
         case *linebot.TextMessage:
-          log.Println(message.Text)
-          if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
-            log.Print(err)
+          switch {
+          case strings.HasPrefix(message.Text, "登録"):
+            var user models.User
+            result := db.Where("user_id").First(&user)
+
+            if result.Error == gorm.ErrRecordNotFound {
+              // recode not exist
+              user = models.User{
+                UserID: event.Source.UserID,
+                Todos: []models.Todo{
+                  {Title: message.Text},
+                },
+              }
+              db.Create(&user)
+            } else {
+              // recode exist 
+              todo := models.Todo{
+                UserID: user.UserID,
+                Title: message.Text,
+              }
+              db.Create(&todo)
+            }
+
+            if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text+"を登録したよ")).Do(); err != nil {
+              log.Print(err)
+            }
+          case strings.HasPrefix(message.Text, "削除"):
+          case strings.HasPrefix(message.Text, "一覧"):
           }
         }
       }
     }
   })
-
-  // user設定
-  // router.GET("/users", func(c *gin.Context) {
-  //   var users []User
-  //   db.Find(&users)
-  //   c.JSON(200, gin.H{
-  //     "users": users,
-  //   })
-  // })
-
-  // router.POST("/users", func(c *gin.Context) {
-  //   var user User
-  //   c.BindJSON(&user)
-  //   db.Create(&user)
-  //   c.JSON(200, user)
-  // })
 
   fmt.Println("Server running on port "+os.Getenv("PORT"))
   router.Run(":"+os.Getenv("PORT"))
