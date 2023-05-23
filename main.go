@@ -7,7 +7,7 @@ import (
   "github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 
-  "github.com/Kimoto-Norihiro/gin-api/utils/bot"
+  "github.com/Kimoto-Norihiro/gin-line-bot/utils/bot"
 )
 
 func main() {

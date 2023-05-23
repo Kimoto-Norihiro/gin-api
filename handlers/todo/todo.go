@@ -6,9 +6,9 @@ import (
 	"gorm.io/gorm"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 
-	"github.com/Kimoto-Norihiro/gin-api/models"
-	"github.com/Kimoto-Norihiro/gin-api/utils/database"
-	"github.com/Kimoto-Norihiro/gin-api/utils/bot"
+	"github.com/Kimoto-Norihiro/gin-line-bot/models"
+	"github.com/Kimoto-Norihiro/gin-line-bot/utils/database"
+	"github.com/Kimoto-Norihiro/gin-line-bot/utils/bot"
 )
 
 func create(event *linebot.Event, message *linebot.TextMessage) {

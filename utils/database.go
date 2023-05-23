@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
 
-	"github.com/Kimoto-Norihiro/gin-api/models"
+	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 )
 
 func init() {
