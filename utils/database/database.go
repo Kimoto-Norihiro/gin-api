@@ -1,39 +1,41 @@
 package database
 
 import (
-	"os"
 	"log"
+	"os"
 
-	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
-	// "github.com/joho/godotenv"
+	"gorm.io/gorm"
 
 	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 )
 
-var Db *gorm.DB
+var db *gorm.DB
 
-func Init() {
-	// var err error
-	// err = godotenv.Load()
-  // if err != nil {
-  //   log.Println("Error loading .env file")
-  // }
-
+func Init() error {
 	dsn := os.Getenv("DATABASE_URL")
-
 	log.Println(dsn)
-	
-  db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-  if err != nil {
-		log.Println("DB接続エラー")
-		log.Println(err)
-  }
-	Db = db
 
-  err = Db.AutoMigrate(&models.User{}, &models.Todo{})
+	var err error
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Println("DBマイグレーションエラー")
-		log.Fatal(err)
+			return err
 	}
+	log.Println(db)
+
+	// ログ出力有効化
+	db.Debug()
+
+	// テーブル自動マイグレーション
+	err = db.AutoMigrate(&models.User{}, &models.Todo{})
+	if err != nil {
+			return err
+	}
+	log.Println(db)
+
+	return nil
+}
+
+func GetDB() *gorm.DB {
+  return db
 }

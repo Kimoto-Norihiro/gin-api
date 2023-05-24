@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 
 	"github.com/Kimoto-Norihiro/gin-line-bot/handlers/bot_handler"
 	"github.com/Kimoto-Norihiro/gin-line-bot/utils/database"
@@ -13,17 +13,16 @@ import (
 )
 
 func init() {
+  var err error
+	err = godotenv.Load()
+  if err != nil {
+    log.Println("Error loading .env file")
+  }
   database.Init()
   line_bot.Init()
 }
 
 func main() {
-  // var err error
-	// err = godotenv.Load()
-  // if err != nil {
-  //   log.Println("Error loading .env file")
-  // }
-
   router := gin.Default()
 
   router.POST("/bot", func(c *gin.Context) {
