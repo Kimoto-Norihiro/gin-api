@@ -11,7 +11,7 @@ import (
 var Bot *linebot.Client
 
 func Init() {
-  var err error
+  // var err error
 	// err = godotenv.Load()
   // if err != nil {
   //   log.Println("Error loading .env file")

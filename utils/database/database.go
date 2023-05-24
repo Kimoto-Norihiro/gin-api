@@ -14,13 +14,15 @@ import (
 var Db *gorm.DB
 
 func Init() {
-	var err error
+	// var err error
 	// err = godotenv.Load()
   // if err != nil {
   //   log.Println("Error loading .env file")
   // }
 
-	dsn := os.Getenv("CLEARDB_DATABASE_URL")
+	dsn := os.Getenv("DATABASE_URL")
+
+	log.Println(dsn)
 	
   db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
   if err != nil {
