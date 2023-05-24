@@ -9,8 +9,9 @@ import (
 	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 )
 
+var Db *gorm.DB
+
 func init() {
-	var Db *gorm.DB
 	dsn := os.Getenv("CLEARDB_DATABASE_URL")
 	
   Db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
