@@ -1,4 +1,4 @@
-module github.com/Kimoto-Norihiro/gin-api
+module github.com/Kimoto-Norihiro/gin-line-bot
 
 go 1.17
 
