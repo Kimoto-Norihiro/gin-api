@@ -6,6 +6,7 @@ import (
 
 	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
+	"github.com/joho/godotenv"
 
 	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 )
@@ -13,18 +14,21 @@ import (
 var Db *gorm.DB
 
 func init() {
-	dsn := os.Getenv("CLEARDB_DATABASE_URL")
 	var err error
-	
-  Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	err = godotenv.Load()
   if err != nil {
-		log.Println("DB接続エラー")
-		log.Fatal(err)
+    log.Println("Error loading .env file")
   }
+
+	dsn := os.Getenv("CLEARDB_DATABASE_URL")
+  db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+  if err != nil {
+		log.Println(err)
+  }
+	Db = db
 
   err = Db.AutoMigrate(&models.User{}, &models.Todo{})
 	if err != nil {
-		log.Println("DBマイグレーションエラー")
 		log.Fatal(err)
 	}
 }
