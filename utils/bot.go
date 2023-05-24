@@ -17,3 +17,10 @@ func init() {
     panic(err)
   }
 }
+
+func BotReplyMessage(event *linebot.Event, message string) {
+  _, err := Bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message)).Do()
+  if err != nil {
+    panic(err)
+  }
+}
