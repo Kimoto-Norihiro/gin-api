@@ -2,6 +2,7 @@ package utils
 
 import (
 	"os"
+	"log"
 
 	"gorm.io/gorm"
 	"gorm.io/driver/mysql"
@@ -13,11 +14,15 @@ var Db *gorm.DB
 
 func init() {
 	dsn := os.Getenv("CLEARDB_DATABASE_URL")
+	var err error
 	
-  Db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+  Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
   if err != nil {
-    panic(err)
+		log.Fatal(err)
   }
 
-  Db.AutoMigrate(&models.User{}, &models.Todo{})
+  err = Db.AutoMigrate(&models.User{}, &models.Todo{})
+	if err != nil {
+		log.Fatal(err)
+	}
 }
