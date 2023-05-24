@@ -2,14 +2,14 @@ package user_handler
 
 import (
   "github.com/Kimoto-Norihiro/gin-line-bot/models"
-  "github.com/Kimoto-Norihiro/gin-line-bot/utils"
+  "github.com/Kimoto-Norihiro/gin-line-bot/utils/database"
 )
 
 func Create(UserID string) (*models.User, error) {
   user := &models.User{
     UserID: UserID,
   }
-  result := utils.Db.Create(user)
+  result := database.Db.Create(user)
   if result.Error != nil {
     return nil, result.Error
   }
@@ -18,7 +18,7 @@ func Create(UserID string) (*models.User, error) {
 
 func Show(UserID string) (*models.User, error) {
   var user models.User
-  result := utils.Db.Where("user_id = ?", UserID).First(&user)
+  result := database.Db.Where("user_id = ?", UserID).First(&user)
   if result.Error != nil {
     return nil, result.Error
   }

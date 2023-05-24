@@ -1,4 +1,4 @@
-package utils
+package line_bot
 
 import (
 	"log"
@@ -10,7 +10,7 @@ import (
 
 var Bot *linebot.Client
 
-func init() {
+func Init() {
   var err error
 	// err = godotenv.Load()
   // if err != nil {

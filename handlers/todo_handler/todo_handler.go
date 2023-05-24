@@ -5,7 +5,7 @@ import (
   "gorm.io/gorm"
 
   "github.com/Kimoto-Norihiro/gin-line-bot/models"
-  "github.com/Kimoto-Norihiro/gin-line-bot/utils"
+  "github.com/Kimoto-Norihiro/gin-line-bot/utils/database"
   "github.com/Kimoto-Norihiro/gin-line-bot/handlers/user_handler"
 )
 
@@ -31,7 +31,7 @@ func Create(event *linebot.Event, title string) (models.Todo, error) {
     UserID: user.UserID,
     Title: title,
   }
-  result := utils.Db.Create(&todo)
+  result := database.Db.Create(&todo)
   if result.Error != nil {
     return todo, result.Error
   }
@@ -52,7 +52,7 @@ func Delete(event *linebot.Event, title string) error {
   if err != nil {
     return err
   }
-  result := utils.Db.Where("user_id = ? AND title = ?", user.ID, title).Delete(&models.Todo{})
+  result := database.Db.Where("user_id = ? AND title = ?", user.ID, title).Delete(&models.Todo{})
   if result.Error != nil {
     return result.Error
   }
