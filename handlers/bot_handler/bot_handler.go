@@ -1,13 +1,14 @@
 package bot_handler
 
 import (
+	"log"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 
-	"github.com/Kimoto-Norihiro/gin-line-bot/utils/line_bot"
 	"github.com/Kimoto-Norihiro/gin-line-bot/handlers/todo_handler"
+	"github.com/Kimoto-Norihiro/gin-line-bot/utils/line_bot"
 )
 
 func MainHandler(c *gin.Context) {
@@ -30,7 +31,7 @@ func MainHandler(c *gin.Context) {
 							title := strings.TrimPrefix(message.Text, "登録　")
 							todo, err := todo_handler.Create(event, title)
 							if err != nil {
-								line_bot.BotReplyMessage(event, "登録に失敗しました。")
+								line_bot.BotReplyMessage(event, "登録に失敗しました。"+err.Error())
 							}
 							line_bot.BotReplyMessage(event, todo.Title+"を登録しました。")
 
@@ -51,6 +52,7 @@ func MainHandler(c *gin.Context) {
 							for _, todo := range todos {
 								titles = append(titles, todo.Title)
 							}
+							log.Println(strings.Join(titles, "\n"))
 							line_bot.BotReplyMessage(event, strings.Join(titles, "\n"))
 
 						default:
