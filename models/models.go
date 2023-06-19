@@ -4,14 +4,17 @@ import (
   "gorm.io/gorm"
 )
 
+// User モデル
 type User struct {
   gorm.Model
-  UserID string `json:"user_id"`
-  Todos  []Todo `json:"todos"`
+  LineUserID string `json:"line_user_id"`
+  Todos      []Todo `json:"todos"`
 }
 
+// Todo モデル  
 type Todo struct {
   gorm.Model
   Title   string `json:"title"`
-  UserID  string `json:"user_id"`
+  UserID  uint   `json:"user_id"`
+  User    User   `json:"user" gorm:"foreignkey:UserID"` // User への外部キー
 }

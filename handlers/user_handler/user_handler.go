@@ -5,9 +5,9 @@ import (
   "github.com/Kimoto-Norihiro/gin-line-bot/utils/database"
 )
 
-func Create(UserID string) (*models.User, error) {
+func Create(LineUserID string) (*models.User, error) {
   user := &models.User{
-    UserID: UserID,
+    LineUserID: LineUserID,
   }
   result := database.Db.Create(user)
   if result.Error != nil {

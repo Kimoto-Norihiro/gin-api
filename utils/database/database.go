@@ -14,7 +14,6 @@ var Db *gorm.DB
 
 func Init() error {
 	dsn := os.Getenv("DATABASE_URL")
-	log.Println(dsn)
 
 	var err error
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})

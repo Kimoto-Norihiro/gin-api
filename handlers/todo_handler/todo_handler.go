@@ -28,7 +28,7 @@ func Create(event *linebot.Event, title string) (models.Todo, error) {
     return models.Todo{}, err
   }
   todo := models.Todo{
-    UserID: user.UserID,
+    UserID: user.ID,
     Title: title,
   }
   result := database.Db.Create(&todo)
