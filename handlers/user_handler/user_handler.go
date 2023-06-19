@@ -16,9 +16,9 @@ func Create(LineUserID string) (*models.User, error) {
   return user, nil
 }
 
-func Show(UserID string) (*models.User, error) {
+func Show(LineUserID string) (*models.User, error) {
   var user models.User
-  result := database.Db.Where("user_id = ?", UserID).First(&user)
+  result := database.Db.Where("line_user_id = ?", LineUserID).First(&user)
   if result.Error != nil {
     return nil, result.Error
   }
