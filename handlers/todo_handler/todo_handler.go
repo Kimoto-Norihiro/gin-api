@@ -43,7 +43,12 @@ func Index(event *linebot.Event) ([]models.Todo, error) {
   if err != nil {
     return nil, err
   }
-  todos := user.Todos
+  
+  var todos []models.Todo
+  result := database.Db.Where("user_id = ?", user.ID).Find(&todos)
+  if result.Error != nil {
+    return nil, result.Error
+  }
   return todos, nil
 }
 
