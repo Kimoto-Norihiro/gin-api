@@ -31,7 +31,7 @@ func MainHandler(c *gin.Context) {
 							title := strings.TrimPrefix(message.Text, "登録　")
 							todo, err := todo_handler.Create(event, title)
 							if err != nil {
-								line_bot.BotReplyMessage(event, "登録に失敗しました。"+err.Error())
+								line_bot.BotReplyMessage(event, "登録に失敗しました。"+err.Error()+"UserId:"+event.Source.UserID)
 							}
 							line_bot.BotReplyMessage(event, todo.Title+"を登録しました。")
 

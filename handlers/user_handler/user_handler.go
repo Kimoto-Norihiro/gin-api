@@ -9,7 +9,7 @@ func Create(UserID string) (*models.User, error) {
   user := &models.User{
     UserID: UserID,
   }
-  result := database.GetDB().Create(user)
+  result := database.Db.Create(user)
   if result.Error != nil {
     return nil, result.Error
   }
@@ -18,7 +18,7 @@ func Create(UserID string) (*models.User, error) {
 
 func Show(UserID string) (*models.User, error) {
   var user models.User
-  result := database.GetDB().Where("user_id = ?", UserID).First(&user)
+  result := database.Db.Where("user_id = ?", UserID).First(&user)
   if result.Error != nil {
     return nil, result.Error
   }

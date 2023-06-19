@@ -31,7 +31,7 @@ func Create(event *linebot.Event, title string) (models.Todo, error) {
     UserID: user.UserID,
     Title: title,
   }
-  result := database.GetDB().Create(&todo)
+  result := database.Db.Create(&todo)
   if result.Error != nil {
     return todo, result.Error
   }
@@ -52,7 +52,7 @@ func Delete(event *linebot.Event, title string) error {
   if err != nil {
     return err
   }
-  result := database.GetDB().Where("user_id = ? AND title = ?", user.ID, title).Delete(&models.Todo{})
+  result := database.Db.Where("user_id = ? AND title = ?", user.ID, title).Delete(&models.Todo{})
   if result.Error != nil {
     return result.Error
   }

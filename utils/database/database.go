@@ -10,32 +10,28 @@ import (
 	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 )
 
-var db *gorm.DB
+var Db *gorm.DB
 
 func Init() error {
 	dsn := os.Getenv("DATABASE_URL")
 	log.Println(dsn)
 
 	var err error
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 			return err
 	}
-	log.Println(db)
+	log.Println(Db)
 
 	// ログ出力有効化
-	db.Debug()
+	Db.Debug()
 
 	// テーブル自動マイグレーション
-	err = db.AutoMigrate(&models.User{}, &models.Todo{})
+	err = Db.AutoMigrate(&models.User{}, &models.Todo{})
 	if err != nil {
 			return err
 	}
-	log.Println(db)
+	log.Println(Db)
 
 	return nil
-}
-
-func GetDB() *gorm.DB {
-  return db
 }
