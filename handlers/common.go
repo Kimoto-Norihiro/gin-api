@@ -1,9 +1,9 @@
-package controllers
+package handlers
 
 type response struct {
 	Status  int         `json:"status"`
 	Message string      `json:"message"`
-	Result  interface{} `json:"result"`
+	Data    interface{} `json:"data"`
 }
 
 func newResponse(status int, message string, result interface{}) *response {
