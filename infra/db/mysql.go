@@ -1,4 +1,4 @@
-package database
+package db
 
 import (
     "gorm.io/driver/mysql"
@@ -6,7 +6,6 @@ import (
 )
 
 var db *gorm.DB
-var dsn = "n000r111:password@tcp(127.0.0.1:3306)/message_api?charset=utf8mb4&parseTime=True&loc=Local"
 
 func CreateMySqlDB(dsn string) (*gorm.DB, error) {
     if db != nil {
