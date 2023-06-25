@@ -5,17 +5,17 @@ import (
     "gorm.io/gorm"
 )
 
-var db *gorm.DB
+var Db *gorm.DB
 
-func CreateMySqlDB(dsn string) (*gorm.DB, error) {
-    if db != nil {
-        return db, nil
+func CreateMySqlDB(dsn string) error {
+    if Db != nil {
+        return nil
     }
     var err error
     
-    db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+    Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
     if err != nil {
-        return nil, err
+        return err
     }
-    return db, nil
+    return nil
 }
