@@ -1,26 +1,32 @@
-package handler
+package handlers
 
 import (
-	"github.com/Kimoto-Norihiro/gin-line-bot/models"
-	"github.com/Kimoto-Norihiro/gin-line-bot/utils/database"
+	"github.com/gin-gonic/gin"
+
+	"github.com/Kimoto-Norihiro/gin-api/models"
+	"github.com/Kimoto-Norihiro/gin-api/usecases"
 )
 
-func CreateUser(LineUserID string) (*models.User, error) {
-	user := &models.User{
-		LineUserID: LineUserID,
-	}
-	result := database.Db.Create(user)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return user, nil
+type UserHandler struct{
+	usecase usecases.Usecase
 }
 
-func ShowUser(LineUserID string) (*models.User, error) {
+func NewUserHandler(usecase usecases.Usecase) *UserHandler {
+	return &UserHandler{usecase: usecase}
+}
+
+func (uh *UserHandler) CreateUser(c *gin.Context) {
 	var user models.User
-	result := database.Db.Where("line_user_id = ?", LineUserID).First(&user)
-	if result.Error != nil {
-		return nil, result.Error
+	var err error
+	
+	if err = c.BindJSON(&user); err != nil {
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
 	}
-	return &user, nil
+	err = uh.usecase.CreateUser(c, &user)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(201, gin.H{"message": "success"})
 }
