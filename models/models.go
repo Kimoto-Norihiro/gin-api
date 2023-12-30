@@ -1,20 +1,20 @@
 package models
 
 import (
-  "gorm.io/gorm"
+	"gorm.io/gorm"
 )
 
 // User モデル
 type User struct {
-  gorm.Model
-  LineUserID string `json:"line_user_id"`
-  Todos      []Todo `json:"todos"`
+	gorm.Model
+	LineUserID string `json:"line_user_id"`
+	Todos      []Todo `json:"todos"`
 }
 
-// Todo モデル  
+// Todo モデル
 type Todo struct {
-  gorm.Model
-  Title   string `json:"title"`
-  UserID  uint   `json:"user_id"`
-  User    User   `json:"user" gorm:"foreignkey:UserID"` // User への外部キー
+	ID int 
+	Title  string `json:"title"`
+	UserID uint   `json:"user_id"`
+	User   User   `json:"user" gorm:"foreignkey:UserID"` // User への外部キー
 }

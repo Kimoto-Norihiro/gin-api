@@ -18,17 +18,15 @@ func Init() error {
 	var err error
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-			return err
+		return err
 	}
 	log.Println(Db)
 
-	// ログ出力有効化
 	Db.Debug()
 
-	// テーブル自動マイグレーション
 	err = Db.AutoMigrate(&models.User{}, &models.Todo{})
 	if err != nil {
-			return err
+		return err
 	}
 	log.Println(Db)
 
