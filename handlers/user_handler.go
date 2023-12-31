@@ -3,8 +3,8 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/Kimoto-Norihiro/gin-api/models"
-	"github.com/Kimoto-Norihiro/gin-api/usecases"
+	"github.com/Kimoto-Norihiro/gin-line-bot/models"
+	"github.com/Kimoto-Norihiro/gin-line-bot/usecases"
 )
 
 type UserHandler struct{
