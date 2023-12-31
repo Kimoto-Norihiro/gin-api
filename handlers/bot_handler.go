@@ -4,7 +4,6 @@ import (
 	"log"
 	"strings"
 
-	"github.com/Kimoto-Norihiro/gin-line-bot/line_bot"
 	"github.com/gin-gonic/gin"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"gorm.io/gorm"
@@ -12,15 +11,18 @@ import (
 
 type BotHandler struct {
 	db      *gorm.DB
-	lineBot *line_bot.LineBot
+	botClient *linebot.Client
 }
 
-func NewBotHandler(db *gorm.DB, lineBot *line_bot.LineBot) *BotHandler {
-	return &BotHandler{db: db, lineBot: lineBot}
+func NewBotHandler(db *gorm.DB, botClient *linebot.Client) *BotHandler {
+	return &BotHandler{
+		db: db, 
+		botClient: botClient,
+	}
 }
 
 func (h *BotHandler) Response(c *gin.Context) {
-	events, err := h.lineBot.ParseRequest(c.Request)
+	events, err := h.botClient.ParseRequest(c.Request)
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
 			c.Writer.WriteHeader(400)

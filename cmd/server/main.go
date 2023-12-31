@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	lineBot, err := line_bot.NewLineBot()
+	botClient, err := line_bot.NewBotClient()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -20,8 +20,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	bh := handlers.NewBotHandler(db, lineBot)
+	bh := handlers.NewBotHandler(db, botClient)
+	
 	r := gin.Default()
 
 	r.POST("/bot", bh.Response)
