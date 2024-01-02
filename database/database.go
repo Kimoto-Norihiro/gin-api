@@ -2,7 +2,6 @@ package database
 
 import (
 	"errors"
-	"os"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -10,8 +9,7 @@ import (
 	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 )
 
-func ConnDB() (*gorm.DB, error) {
-	dsn := os.Getenv("DATABASE_URL")
+func ConnDB(dsn string) (*gorm.DB, error) {
 	if dsn == "" {
 		return nil, errors.New("DATABASE_URL is not set")
 	}
@@ -19,14 +17,11 @@ func ConnDB() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	db.Debug()
-
 	return db, nil
 }
 
 func Migration(db *gorm.DB) error {
-	err := db.AutoMigrate(&models.User{}, &models.Todo{})
+	err := db.AutoMigrate(&models.Todo{})
 	if err != nil {
 		return err
 	}
