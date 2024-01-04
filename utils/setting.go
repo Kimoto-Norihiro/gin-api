@@ -2,6 +2,7 @@ package utils
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 )
@@ -14,7 +15,8 @@ type Setting struct {
 }
 
 func LoadSetting() (*Setting, error) {
-	err := godotenv.Load("../../.env")
+	path := filepath.Join("..", "..", ".env")
+	err := godotenv.Load(path)
 	if err != nil {
 		return nil, err
 	}

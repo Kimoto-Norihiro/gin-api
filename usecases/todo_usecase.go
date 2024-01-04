@@ -1,7 +1,7 @@
 package usecases
 
 import (
-	"errors"
+	"context"
 
 	"github.com/Kimoto-Norihiro/gin-line-bot/models"
 	"github.com/Kimoto-Norihiro/gin-line-bot/repository"
@@ -15,20 +15,34 @@ type TodoUsecase struct {
 	repo repository.ITodoRepository
 }
 
-func NewTodoUsecase(repo repository.ITodoRepository) *TodoUsecase {
+func NewTodoUsecase(db *gorm.DB, repo repository.ITodoRepository) *TodoUsecase {
 	return &TodoUsecase{
+		db:   db,
 		repo: repo,
 	}
 }
 
-func (h *TodoUsecase) CreateTodo(line_user_id string, title string) (*models.Todo, error) {
-	return nil, errors.New("not implemented")
+func (h *TodoUsecase) CreateTodo(ctx context.Context, line_user_id string, title string) error {
+	err := h.db.Transaction(func(tx *gorm.DB) error {
+		return h.repo.Create(ctx, tx, line_user_id, title)
+	})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func (h *TodoUsecase) ListTodos(line_user_id string) (*[]models.Todo, error) {
-	return nil, errors.New("not implemented")
+func (h *TodoUsecase) ListTodos(ctx context.Context, line_user_id string) (*[]models.Todo, error) {
+	return h.repo.List(ctx, h.db, line_user_id)
 }
 
-func (h *TodoUsecase) DeleteTodo(line_user_id string, title string) error {
-	return errors.New("not implemented")
+func (h *TodoUsecase) DeleteTodo(ctx context.Context, line_user_id string, title string) error {
+	err := h.db.Transaction(func(tx *gorm.DB) error {
+		return h.repo.Delete(ctx, tx, line_user_id, title)
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
